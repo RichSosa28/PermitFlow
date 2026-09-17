@@ -1,0 +1,7 @@
+.gradle/
+.gradle-user/
+.gradle-dist/
+build/
+node_modules/
+cdk.out/
+.DS_Store
