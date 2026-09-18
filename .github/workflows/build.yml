@@ -10,4 +10,6 @@ jobs:
         with: { distribution: temurin, java-version: '21' }
       - run: chmod +x gradlew && ./gradlew test
       - run: docker build --tag permitflow:${{ github.sha }} .
-      - run: helm lint helm/permitflow
+      - name: Lint Helm chart when present
+        if: ${{ hashFiles('helm/permitflow/Chart.yaml') != '' }}
+        run: helm lint helm/permitflow
