@@ -18,13 +18,16 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 class TenantIsolationIntegrationTest {
     @Container
-    static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine");
+    static final PostgreSQLContainer<?> POSTGRES =
+    new PostgreSQLContainer<>("postgres:16-alpine")
+        .withDatabaseName("permitflow_test")
+        .withInitScript("db/test-init.sql");
 
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
-        registry.add("spring.datasource.username", POSTGRES::getUsername);
-        registry.add("spring.datasource.password", POSTGRES::getPassword);
+        registry.add("spring.datasource.username", () -> "permitflow_app");
+        registry.add("spring.datasource.password", () -> "permitflow_test_password");
     }
 
     @Autowired
