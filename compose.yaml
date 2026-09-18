@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: permitflow
+      POSTGRES_USER: permitflow
+      POSTGRES_PASSWORD: permitflow
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U permitflow -d permitflow"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  api:
+    build: .
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/permitflow
+      DATABASE_USER: permitflow
+      DATABASE_PASSWORD: permitflow
+      JWT_SECRET: change-me-in-production-change-me
+      SPRING_PROFILES_ACTIVE: demo
+    ports: ["8080:8080"]
+    depends_on:
+      postgres: { condition: service_healthy }
