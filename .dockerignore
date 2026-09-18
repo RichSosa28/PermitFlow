@@ -1,0 +1,6 @@
+.git
+.gradle
+.gradle-user
+.gradle-dist
+build
+ops/evidence
